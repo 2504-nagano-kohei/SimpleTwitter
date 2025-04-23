@@ -6,9 +6,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<link href="./css/style.css" rel="stylesheet" type="text/css">
-	<title>簡易Twitter</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="./css/style.css" rel="stylesheet" type="text/css">
+<title>簡易Twitter</title>
 </head>
 <body>
 	<div class="main-contents">
@@ -64,7 +64,11 @@
 			<c:forEach items="${messages}" var="message">
 				<div class="message">
 					<div class="account-name">
-						<span class="account"><c:out value="${message.account}" /></span>
+						<span class="account"> 
+							<a href="./?user_id=<c:out value="${message.userId}"/> "> <c:out
+										value="${message.account}" />
+							</a>
+						</span>
 						<span class="name"><c:out value="${message.name}" /></span>
 					</div>
 					<div class="text">

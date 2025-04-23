@@ -130,8 +130,8 @@ public class UserService {
 
 	    Connection connection = null;
 	    try {
-	        // パスワードが入力されていなければパスワードを暗号化 実践課題①
-	        if (!StringUtils.isEmpty(user.getPassword())) {
+	        // パスワードが入力されていなければパスワードを暗号化（空白文字も未入力と同義とする） 実践課題①
+	        if (!StringUtils.isBlank(user.getPassword())) {
 	        	String encPassword = CipherUtil.encrypt(user.getPassword());
 		        user.setPassword(encPassword);
 	        }

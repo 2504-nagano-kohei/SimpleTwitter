@@ -196,7 +196,7 @@ public class UserDao {
 			sql.append("    account = ?, ");
 			sql.append("    name = ?, ");
 			sql.append("    email = ?, ");
-			if (!StringUtils.isEmpty(user.getPassword())) { // 実践課題①
+			if (!StringUtils.isBlank(user.getPassword())) { // 実践課題①
 				sql.append("    password = ?, ");
 			}
 			sql.append("    description = ?, ");
@@ -208,7 +208,7 @@ public class UserDao {
 			ps.setString(1, user.getAccount());
 			ps.setString(2, user.getName());
 			ps.setString(3, user.getEmail());
-			if (!user.getPassword().isEmpty()) { // 実践課題① ~217行目
+			if (!StringUtils.isBlank(user.getPassword())) { // 実践課題① ~217行目
 				ps.setString(4, user.getPassword());
 				ps.setString(5, user.getDescription());
 				ps.setInt(6, user.getId());
