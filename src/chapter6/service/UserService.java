@@ -125,29 +125,63 @@ public class UserService {
 
 	public void update(User user) {
 
-	    log.info(new Object(){}.getClass().getEnclosingClass().getName() +
-	    " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+		log.info(new Object() {
+		}.getClass().getEnclosingClass().getName() +
+				" : " + new Object() {
+				}.getClass().getEnclosingMethod().getName());
 
-	    Connection connection = null;
-	    try {
-	        // パスワードが入力されていなければパスワードを暗号化（空白文字も未入力と同義とする） 実践課題①
-	        if (!StringUtils.isBlank(user.getPassword())) {
-	        	String encPassword = CipherUtil.encrypt(user.getPassword());
-		        user.setPassword(encPassword);
-	        }
-	        connection = getConnection();
-	        new UserDao().update(connection, user);
-	        commit(connection);
-	    } catch (RuntimeException e) {
-	        rollback(connection);
-		  log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
-	        throw e;
-	    } catch (Error e) {
-	        rollback(connection);
-		  log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
-	        throw e;
-	    } finally {
-	        close(connection);
-	    }
+		Connection connection = null;
+		try {
+			// パスワードが入力されていなければパスワードを暗号化（空白文字も未入力と同義とする） 実践課題①
+			if (!StringUtils.isBlank(user.getPassword())) {
+				String encPassword = CipherUtil.encrypt(user.getPassword());
+				user.setPassword(encPassword);
+			}
+			connection = getConnection();
+			new UserDao().update(connection, user);
+			commit(connection);
+		} catch (RuntimeException e) {
+			rollback(connection);
+			log.log(Level.SEVERE, new Object() {
+			}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			log.log(Level.SEVERE, new Object() {
+			}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+
+	/*
+	 * 実践課題③
+	 * String型の引数をもつ、selectメソッドを追加する
+	 * ログを残す処理も追加
+	 */
+	public User select(String account) {
+
+		log.info(new Object() {
+		}.getClass().getEnclosingClass().getName() +
+				" : " + new Object() {
+				}.getClass().getEnclosingMethod().getName());
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+			User user = new UserDao().select(connection, account);
+			commit(connection);
+
+			return user;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
 	}
 }

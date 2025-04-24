@@ -110,6 +110,12 @@ public class SignUpServlet extends HttpServlet {
             errorMessages.add("メールアドレスは50文字以下で入力してください");
         }
 
+     // 実践課題③
+     		User duplicatedAccount = new UserService().select(account);
+     		if (duplicatedAccount != null) {
+     			errorMessages.add("入力したアカウント名は既に使われています。");
+     		}
+
         if (errorMessages.size() != 0) {
             return false;
         }

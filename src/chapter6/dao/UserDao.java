@@ -147,6 +147,42 @@ public class UserDao {
 		}
 	}
 
+	/*
+	 * 実践課題③
+	 * String型のaccountを引数にもつ、selectメソッドを追加する
+	 * ログを書き出す処理も追加
+	 */
+	public User select(Connection connection, String account) {
+
+		log.info(new Object() {
+		}.getClass().getEnclosingClass().getName() +
+				" : " + new Object() {
+				}.getClass().getEnclosingMethod().getName());
+
+		PreparedStatement ps = null;
+		try {
+			String sql = "SELECT * FROM users WHERE account = ?";
+
+			ps = connection.prepareStatement(sql);
+			ps.setString(1, account);
+
+			ResultSet rs = ps.executeQuery();
+
+			List<User> users = toUsers(rs);
+			if (users.isEmpty()) {
+				return null;
+			} else if (2 <= users.size()) {
+				throw new IllegalStateException("ユーザーが重複しています");
+			} else {
+				return users.get(0);
+			}
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+
 	public User select(Connection connection, int id) {
 
 		log.info(new Object() {

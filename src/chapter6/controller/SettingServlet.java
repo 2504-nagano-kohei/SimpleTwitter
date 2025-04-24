@@ -68,7 +68,7 @@ public class SettingServlet extends HttpServlet {
 		List<String> errorMessages = new ArrayList<String>();
 
 		User user = getUser(request);
-		if (isValid(user, errorMessages)) {
+		if (isValid(user, errorMessages, request)) {
 			try {
 				new UserService().update(user);
 			} catch (NoRowsUpdatedRuntimeException e) {
@@ -106,7 +106,7 @@ public class SettingServlet extends HttpServlet {
 		return user;
 	}
 
-	private boolean isValid(User user, List<String> errorMessages) {
+	private boolean isValid(User user, List<String> errorMessages, HttpServletRequest request) {
 
 		log.info(new Object() {
 		}.getClass().getEnclosingClass().getName() +
@@ -128,6 +128,16 @@ public class SettingServlet extends HttpServlet {
 		if (!StringUtils.isEmpty(email) && (50 < email.length())) {
 			errorMessages.add("メールアドレスは50文字以下で入力してください");
 		}
+
+		// 実践課題③
+		User duplicatedAccount = new UserService().select(account);
+		HttpSession session = request.getSession();
+		User presentAccount = (User) session.getAttribute("loginUser.account");
+
+		if (duplicatedAccount.getAccount() != null && duplicatedAccount.getAccount() != account) {
+			errorMessages.add("入力したアカウント名は既に使われています。");
+		}
+
 
 		if (errorMessages.size() != 0) {
 			return false;
