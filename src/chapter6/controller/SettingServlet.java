@@ -130,14 +130,17 @@ public class SettingServlet extends HttpServlet {
 		}
 
 		// 実践課題③
-		User duplicatedAccount = new UserService().select(account);
-		HttpSession session = request.getSession();
-		User presentAccount = (User) session.getAttribute("loginUser.account");
+		// ユーザーが更新画面で入力したアカウント名をDBでアカウント名を条件に検索し、抽出してきたデータ
+		User existingAccount = new UserService().select(account);
+		// ログイン中(現在)のid
+		User presentAccount = (User) request.getSession().getAttribute("loginUser");
 
-		if (duplicatedAccount.getAccount() != null && duplicatedAccount.getAccount() != account) {
-			errorMessages.add("入力したアカウント名は既に使われています。");
+		if (existingAccount != null) {
+			// 必ず一意の値が与えられるidで判定
+			if (existingAccount.getId() != presentAccount.getId()) {
+				errorMessages.add("すでに存在するアカウントです");
+			}
 		}
-
 
 		if (errorMessages.size() != 0) {
 			return false;
