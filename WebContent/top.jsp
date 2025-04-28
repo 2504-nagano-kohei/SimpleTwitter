@@ -31,7 +31,6 @@
 					</h2>
 				</div>
 				<div class="account">
-					@
 					<c:out value="${loginUser.account}" />
 				</div>
 				<div class="description">
@@ -62,9 +61,10 @@
 
 		<div class="messages">
 			<c:forEach items="${messages}" var="message">
+			<%-- <c:if test=""></c:if> --%>
 				<div class="message">
 					<div class="account-name">
-						<span class="account"> 
+						<span class="account">
 							<a href="./?user_id=<c:out value="${message.userId}"/> ">
 								<c:out value="${message.account}" />
 							</a>
@@ -78,9 +78,14 @@
 						<fmt:formatDate value="${message.createdDate}"
 							pattern="yyyy/MM/dd HH:mm:ss" />
 					</div>
-				</div>
-			</c:forEach>
-		</div>
+					<form action="deletemessage" method="post">
+						<br /> <input type="hidden" value="削除">
+					</form>
+					<form action="" method="post">
+						<input type="hidden" value="編集">
+					</form>
+				</c:forEach>
+			</div>
 
 		<div class="copyright">Copyright(c)Kohei_Nagano</div>
 	</div>

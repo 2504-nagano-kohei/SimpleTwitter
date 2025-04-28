@@ -36,9 +36,8 @@ public class MessageService {
 
     public void insert(Message message) {
 
-		log.info(new Object() {
-		}.getClass().getEnclosingClass().getName() +" : " + new Object() {
-				}.getClass().getEnclosingMethod().getName());
+		log.info(new Object() {}.getClass().getEnclosingClass().getName()
+		+" : " + new Object() {}.getClass().getEnclosingMethod().getName());
 
         Connection connection = null;
         try {
@@ -47,16 +46,41 @@ public class MessageService {
             commit(connection);
         } catch (RuntimeException e) {
             rollback(connection);
-		log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+            log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
             throw e;
         } catch (Error e) {
             rollback(connection);
-		log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+            log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
             throw e;
         } finally {
             close(connection);
         }
     }
+
+    public void delete(String messageId) {
+
+		log.info(new Object() {}.getClass().getEnclosingClass().getName()
+		+" : " + new Object() {}.getClass().getEnclosingMethod().getName());
+
+		 Connection connection = null;
+
+		 try {
+	            connection = getConnection();
+	            new MessageDao().delete(connection, messageId);
+	            commit(connection);
+	        } catch (RuntimeException e) {
+	            rollback(connection);
+	            log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+	            throw e;
+	        } catch (Error e) {
+	            rollback(connection);
+	            log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+	            throw e;
+	        } finally {
+	            close(connection);
+	        }
+    }
+
     // メッセージ一覧を取得するコード
     public List<UserMessage> select(String userId) {
 
@@ -74,19 +98,16 @@ public class MessageService {
                if(!StringUtils.isEmpty(userId)) {
                    id = Integer.parseInt(userId);
                }
-
                List<UserMessage> messages = new UserMessageDao().select(connection, id, LIMIT_NUM);
-
               commit(connection);
-
               return messages;
           } catch (RuntimeException e) {
               rollback(connection);
-  		log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+              log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
               throw e;
           } catch (Error e) {
               rollback(connection);
-  		log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+              log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
               throw e;
           } finally {
               close(connection);
