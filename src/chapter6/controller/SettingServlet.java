@@ -130,16 +130,11 @@ public class SettingServlet extends HttpServlet {
 		}
 
 		// 実践課題③
-		// ユーザーが更新画面で入力したアカウント名をDBでアカウント名を条件に検索し、抽出してきたデータ
+		// DBでユーザーが更新画面で入力したアカウント名条件に検索し、抽出してきたデータ
 		User existingAccount = new UserService().select(account);
-		// ログイン中(現在)のid
-		User presentAccount = (User) request.getSession().getAttribute("loginUser");
 
-		if (existingAccount != null) {
-			// 必ず一意の値が与えられるidで判定
-			if (existingAccount.getId() != presentAccount.getId()) {
-				errorMessages.add("すでに存在するアカウントです");
-			}
+		if (existingAccount != null && existingAccount.getId() != user.getId()) {
+			errorMessages.add("すでに存在するアカウントです");
 		}
 
 		if (errorMessages.size() != 0) {
