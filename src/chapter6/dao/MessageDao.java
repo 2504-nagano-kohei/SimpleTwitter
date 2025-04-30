@@ -64,7 +64,7 @@ public class MessageDao {
         }
     }
 
-    public void delete(Connection connection, String messageId) {
+    public void delete(Connection connection, int deleteMessageId ) {
 
   	log.info(new Object(){}.getClass().getEnclosingClass().getName() +
   	" : " + new Object(){}.getClass().getEnclosingMethod().getName());
@@ -72,19 +72,37 @@ public class MessageDao {
           PreparedStatement ps = null;
           try {
               StringBuilder sql = new StringBuilder();
-              sql.append(" ");
-              sql.append(" ");
-              sql.append(" ");
-              sql.append(" ");
-              sql.append(" ");
-              sql.append(" ");
-              sql.append(" ");
-              sql.append(" ");
-              sql.append(" ");
+              sql.append(" DELETE FROM messages WHERE id = ?;"); // message_id
+
+              ps = connection.prepareStatement(sql.toString());
+              ps.setInt(1, deleteMessageId );
+
+              ps.executeUpdate();
+          } catch (SQLException e) {
+  		log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+              throw new SQLRuntimeException(e);
+          } finally {
+              close(ps);
+          }
+      }
+
+    public void edit(Connection connection, Message message) {
+
+  	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+          " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+
+          PreparedStatement ps = null;
+          try {
+              StringBuilder sql = new StringBuilder();
+              sql.append("UPDATE messages SET");
+              sql.append("    text, ");
+              sql.append("WHERE");
+              sql.append("    id = ?");  // user_id
 
               ps = connection.prepareStatement(sql.toString());
 
-              ps.setString(1, messageId);
+              ps.setInt(1, message.getUserId());
+              ps.setString(2, message.getText());
 
               ps.executeUpdate();
           } catch (SQLException e) {

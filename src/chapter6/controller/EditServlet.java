@@ -13,8 +13,8 @@ import chapter6.beans.Message;
 import chapter6.logging.InitApplication;
 import chapter6.service.MessageService;
 
-@WebServlet(urlPatterns = { "/deleteMessage" })
-public class DeleteMessageServlet extends HttpServlet {
+@WebServlet(urlPatterns = { "/edit" })
+public class EditServlet extends HttpServlet {
 
 
     /**
@@ -26,26 +26,26 @@ public class DeleteMessageServlet extends HttpServlet {
     * デフォルトコンストラクタ
     * アプリケーションの初期化を実施する。
     */
-    public DeleteMessageServlet() {
+    public EditMessageServlet() {
         InitApplication application = InitApplication.getInstance();
         application.init();
     }
 
 
-    // 削除ボタンが押されたつぶやきのIDを取得してDBから削除したい
+    // 編集ボタンが押されたつぶやきのIDを取得してDB上のtextを編集したい
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
         " : " + new Object(){}.getClass().getEnclosingMethod().getName());
 
-        int deleteMessageId = Integer.parseInt(request.getParameter("deleteMessageId"));
+        int editMessageId = Integer.parseInt(request.getParameter("editMessageId"));
 
         Message message = new Message();
-        message.setId(deleteMessageId);
+        message.setId(editMessageId);
         message.getId();
 
-        new MessageService().delete(deleteMessageId );
+        new MessageService().edit(editMessageId );
         response.sendRedirect("./");
     }
 }

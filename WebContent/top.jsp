@@ -61,7 +61,6 @@
 
 		<div class="messages">
 			<c:forEach items="${messages}" var="message">
-			<%-- <c:if test=""></c:if> --%>
 				<div class="message">
 					<div class="account-name">
 						<span class="account">
@@ -78,12 +77,17 @@
 						<fmt:formatDate value="${message.createdDate}"
 							pattern="yyyy/MM/dd HH:mm:ss" />
 					</div>
-					<form action="deletemessage" method="post">
-						<br /> <input type="hidden" value="削除">
+					<%-- つぶやきの編集 --%>
+					<form action="edit" method="post">
+						<input name="editMessageId" type="hidden" value="${message.id}">
+						<input type="submit" value="編集">
 					</form>
-					<form action="" method="post">
-						<input type="hidden" value="編集">
+					<%-- つぶやきの削除 --%>
+					<form action="deleteMessage" method="post">
+						<input name="deleteMessageId" type="hidden" value="${message.id}">
+						<input type="submit" value="削除"><br />
 					</form>
+
 				</c:forEach>
 			</div>
 

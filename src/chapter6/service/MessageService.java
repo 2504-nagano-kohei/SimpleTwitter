@@ -57,7 +57,7 @@ public class MessageService {
         }
     }
 
-    public void delete(String messageId) {
+    public void delete(int deleteMessageId ) {
 
 		log.info(new Object() {}.getClass().getEnclosingClass().getName()
 		+" : " + new Object() {}.getClass().getEnclosingMethod().getName());
@@ -66,7 +66,7 @@ public class MessageService {
 
 		 try {
 	            connection = getConnection();
-	            new MessageDao().delete(connection, messageId);
+	            new MessageDao().delete(connection, deleteMessageId );
 	            commit(connection);
 	        } catch (RuntimeException e) {
 	            rollback(connection);
@@ -79,6 +79,30 @@ public class MessageService {
 	        } finally {
 	            close(connection);
 	        }
+    }
+
+
+    public void delete(Message message) {
+
+		log.info(new Object() {}.getClass().getEnclosingClass().getName()
+		+" : " + new Object() {}.getClass().getEnclosingMethod().getName());
+
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            new MessageDao().insert(connection, message);
+            commit(connection);
+        } catch (RuntimeException e) {
+            rollback(connection);
+            log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+            throw e;
+        } catch (Error e) {
+            rollback(connection);
+            log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+            throw e;
+        } finally {
+            close(connection);
+        }
     }
 
     // メッセージ一覧を取得するコード
