@@ -14,7 +14,7 @@ import chapter6.logging.InitApplication;
 import chapter6.service.MessageService;
 
 @WebServlet(urlPatterns = { "/edit" })
-public class EditServlet extends HttpServlet {
+public class EditMessageServlet extends HttpServlet {
 
 
     /**
@@ -32,9 +32,9 @@ public class EditServlet extends HttpServlet {
     }
 
 
-    // 編集ボタンが押されたつぶやきのIDを取得してDB上のtextを編集したい
+    // 編集ボタンが押されたつぶやきの編集画面を呼び出したい
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
         " : " + new Object(){}.getClass().getEnclosingMethod().getName());
@@ -45,7 +45,26 @@ public class EditServlet extends HttpServlet {
         message.setId(editMessageId);
         message.getId();
 
-        new MessageService().edit(editMessageId );
+        new MessageService().displayEdit(editMessageId);
+//        request.setAttribute(message, message);
+        request.getRequestDispatcher("edit.jsp").forward(request, response);
+    }
+
+
+    // つぶやきを編集し、更新ボタンが押されるとDB上のtextを上書き（更新）し、top.jspで表示させたい
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
+	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+
+        int deleteMessageId = Integer.parseInt(request.getParameter("deleteMessageId"));
+
+        Message message = new Message();
+        message.setId(deleteMessageId);
+        message.getId();
+
+        new MessageService().delete(deleteMessageId );
         response.sendRedirect("./");
     }
 }

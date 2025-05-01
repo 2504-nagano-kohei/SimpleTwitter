@@ -78,8 +78,8 @@
 							pattern="yyyy/MM/dd HH:mm:ss" />
 					</div>
 					<%-- つぶやきの編集 --%>
-					<form action="edit" method="post">
-						<input name="editMessageId" type="hidden" value="${message.id}">
+					<form action="edit">
+						<input name="editMessageId" type="hidden">
 						<input type="submit" value="編集">
 					</form>
 					<%-- つぶやきの削除 --%>
