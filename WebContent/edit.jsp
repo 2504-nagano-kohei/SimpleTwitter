@@ -8,7 +8,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="./css/style.css" rel="stylesheet" type="text/css">
-<title>簡易Twitter</title>
+<title>つぶやきの編集</title>
 </head>
 <body>
 
@@ -38,10 +38,9 @@
 
 		<div class="form-area">
 			<form action="edit" method="post">
-				<textarea name="editedText" cols="100" rows="5" class="tweet-box">
-					<c:out value="${message.message}" />
-				</textarea>
-				<br /> <input type="submit" value="更新">（140文字まで）
+				<textarea name="editedText" cols="100" rows="5" class="tweet-box"><c:out value="${editMessage.text}" /></textarea><br/>
+				<input name="editedMessageId" value="${editMessage.id}" type="hidden">
+				<input type="submit" value="更新">（140文字まで）
 			</form>
 		</div>
 

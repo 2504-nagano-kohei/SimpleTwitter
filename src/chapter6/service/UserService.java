@@ -33,10 +33,8 @@ public class UserService {
 
 	public void insert(User user) {
 
-		log.info(new Object() {
-		}.getClass().getEnclosingClass().getName() +
-				" : " + new Object() {
-				}.getClass().getEnclosingMethod().getName());
+		log.info(new Object() {}.getClass().getEnclosingClass().getName() +
+		" : " + new Object() {}.getClass().getEnclosingMethod().getName());
 
 		Connection connection = null;
 		try {
@@ -64,10 +62,8 @@ public class UserService {
 
 	public User select(String accountOrEmail, String password) {
 
-		log.info(new Object() {
-		}.getClass().getEnclosingClass().getName() +
-				" : " + new Object() {
-				}.getClass().getEnclosingMethod().getName());
+		log.info(new Object() {}.getClass().getEnclosingClass().getName() +
+		" : " + new Object() {}.getClass().getEnclosingMethod().getName());
 
 		Connection connection = null;
 		try {
@@ -96,10 +92,8 @@ public class UserService {
 
 	public User select(int userId) {
 
-		log.info(new Object() {
-		}.getClass().getEnclosingClass().getName() +
-				" : " + new Object() {
-				}.getClass().getEnclosingMethod().getName());
+		log.info(new Object() {}.getClass().getEnclosingClass().getName() +
+		" : " + new Object() {}.getClass().getEnclosingMethod().getName());
 
 		Connection connection = null;
 		try {
@@ -125,10 +119,8 @@ public class UserService {
 
 	public void update(User user) {
 
-		log.info(new Object() {
-		}.getClass().getEnclosingClass().getName() +
-				" : " + new Object() {
-				}.getClass().getEnclosingMethod().getName());
+		log.info(new Object() {}.getClass().getEnclosingClass().getName() +
+		" : " + new Object() {}.getClass().getEnclosingMethod().getName());
 
 		Connection connection = null;
 		try {
@@ -162,10 +154,8 @@ public class UserService {
 	 */
 	public User select(String account) {
 
-		log.info(new Object() {
-		}.getClass().getEnclosingClass().getName() +
-				" : " + new Object() {
-				}.getClass().getEnclosingMethod().getName());
+		log.info(new Object() {}.getClass().getEnclosingClass().getName() +
+		" : " + new Object() {}.getClass().getEnclosingMethod().getName());
 
 		Connection connection = null;
 		try {

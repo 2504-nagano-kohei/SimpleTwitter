@@ -4,6 +4,7 @@ import static chapter6.utils.CloseableUtil.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,9 +13,7 @@ import chapter6.beans.Message;
 import chapter6.exception.SQLRuntimeException;
 import chapter6.logging.InitApplication;
 
-
 public class MessageDao {
-
 
     /**
     * ロガーインスタンスの生成
@@ -113,8 +112,8 @@ public class MessageDao {
           }
       }
 
-    // 編集対象のつぶやき内容を取得する
-    public void displayEdit(Connection connection, int editMessageId) {
+    // 編集対象のつぶやき内容を取得する(つぶやきの編集画面を表示)
+    public Message displayEdit(Connection connection, int editMessageId) {
 
     	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
             " : " + new Object(){}.getClass().getEnclosingMethod().getName());
@@ -122,20 +121,26 @@ public class MessageDao {
             PreparedStatement ps = null;
             try {
                 StringBuilder sql = new StringBuilder();
-                sql.append("SELECT text,");
-                sql.append("WHERE");
-                sql.append("    id = ?");  // user_id
+                sql.append("SELECT id, text FROM messages WHERE id = ?");
 
                 ps = connection.prepareStatement(sql.toString());
-
                 ps.setInt(1, editMessageId);
+                ResultSet rs = ps.executeQuery();
 
-                ps.executeUpdate();
+                Message editMessage = new Message();
+
+                while (rs.next()) {
+                	editMessage.setId(rs.getInt("id"));
+                	editMessage.setText(rs.getString("text"));
+                }
+
+                return editMessage;
             } catch (SQLException e) {
     		log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
                 throw new SQLRuntimeException(e);
             } finally {
                 close(ps);
             }
+
         }
 }

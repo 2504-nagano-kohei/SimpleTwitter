@@ -78,16 +78,17 @@
 							pattern="yyyy/MM/dd HH:mm:ss" />
 					</div>
 					<%-- つぶやきの編集 --%>
-					<form action="edit">
-						<input name="editMessageId" type="hidden">
-						<input type="submit" value="編集">
-					</form>
-					<%-- つぶやきの削除 --%>
-					<form action="deleteMessage" method="post">
-						<input name="deleteMessageId" type="hidden" value="${message.id}">
-						<input type="submit" value="削除"><br />
-					</form>
-
+					<div>
+						<form action="edit">
+							<input name="editMessageId" value="${message.id}" type="hidden">
+							<input type="submit" value="編集">
+						</form>
+						<%-- つぶやきの削除 --%>
+						<form action="deleteMessage" method="post">
+							<input name="deleteMessageId" value="${message.id}" type="hidden">
+							<input type="submit" value="削除"><br />
+						</form>
+					</div>
 				</c:forEach>
 			</div>
 

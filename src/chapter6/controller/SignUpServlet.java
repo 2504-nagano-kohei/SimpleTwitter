@@ -35,6 +35,7 @@ public class SignUpServlet extends HttpServlet {
 
 	}
 
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
@@ -47,14 +48,13 @@ public class SignUpServlet extends HttpServlet {
 		request.getRequestDispatcher("signup.jsp").forward(request, response);
 	}
 
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
-		log.info(new Object() {
-		}.getClass().getEnclosingClass().getName() +
-				" : " + new Object() {
-				}.getClass().getEnclosingMethod().getName());
+		log.info(new Object() {}.getClass().getEnclosingClass().getName() +
+		" : " + new Object() {}.getClass().getEnclosingMethod().getName());
 
 		List<String> errorMessages = new ArrayList<String>();
 
@@ -68,12 +68,11 @@ public class SignUpServlet extends HttpServlet {
 		response.sendRedirect("./");
 	}
 
+
 	private User getUser(HttpServletRequest request) throws IOException, ServletException {
 
-		log.info(new Object() {
-		}.getClass().getEnclosingClass().getName() +
-				" : " + new Object() {
-				}.getClass().getEnclosingMethod().getName());
+		log.info(new Object() {}.getClass().getEnclosingClass().getName() +
+		" : " + new Object() {}.getClass().getEnclosingMethod().getName());
 
 		User user = new User();
 		user.setName(request.getParameter("name"));
@@ -84,12 +83,11 @@ public class SignUpServlet extends HttpServlet {
 		return user;
 	}
 
+
 	private boolean isValid(User user, List<String> errorMessages) {
 
-		log.info(new Object() {
-		}.getClass().getEnclosingClass().getName() +
-				" : " + new Object() {
-				}.getClass().getEnclosingMethod().getName());
+		log.info(new Object() {}.getClass().getEnclosingClass().getName() +
+		" : " + new Object() {}.getClass().getEnclosingMethod().getName());
 
 		String name = user.getName();
 		String account = user.getAccount();

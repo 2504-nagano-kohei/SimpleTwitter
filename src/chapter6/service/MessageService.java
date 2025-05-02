@@ -110,7 +110,7 @@ public class MessageService {
 	}
 
 	// つぶやきの編集画面を呼び出す
-	public void displayEdit(int editMessageId) {
+	public Message displayEdit(int editMessageId) {
 
 		log.info(new Object() {}.getClass().getEnclosingClass().getName()
 		+ " : " + new Object() {}.getClass().getEnclosingMethod().getName());
@@ -118,8 +118,10 @@ public class MessageService {
 		Connection connection = null;
 		try {
 			connection = getConnection();
-			new MessageDao().displayEdit(connection, editMessageId);
+			Message editMessage = new MessageDao().displayEdit(connection, editMessageId);
 			commit(connection);
+
+			return editMessage;
 		} catch (RuntimeException e) {
 			rollback(connection);
 			log.log(Level.SEVERE, new Object() {
