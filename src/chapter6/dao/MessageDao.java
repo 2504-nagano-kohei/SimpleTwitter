@@ -143,4 +143,32 @@ public class MessageDao {
             }
 
         }
+
+
+
+    	public void update(Connection connection, int updatedMessageId, String updatedMessage) {
+
+    		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+    		" : " + new Object(){}.getClass().getEnclosingMethod().getName());
+
+    		PreparedStatement ps = null;
+    		try {
+                StringBuilder sql = new StringBuilder();
+                sql.append("UPDATE messages SET");
+                sql.append("    text = ?");
+                sql.append("WHERE");
+                sql.append("    id = ?");
+
+                ps = connection.prepareStatement(sql.toString());
+                ps.setString(1, updatedMessage);
+                ps.setInt(2, updatedMessageId);
+                ps.executeUpdate();
+
+            } catch (SQLException e) {
+    		log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
+                throw new SQLRuntimeException(e);
+            } finally {
+                close(ps);
+            }
+    	}
 }

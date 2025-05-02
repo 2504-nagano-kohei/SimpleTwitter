@@ -38,11 +38,14 @@
 
 		<div class="form-area">
 			<form action="edit" method="post">
-				<textarea name="editedText" cols="100" rows="5" class="tweet-box"><c:out value="${editMessage.text}" /></textarea><br/>
-				<input name="editedMessageId" value="${editMessage.id}" type="hidden">
+				<textarea name="updatedMessage" cols="100" rows="5" class="tweet-box"><c:out value="${editMessage.text}" /></textarea><br/>
+				<input name="updatedMessageId" value="${editMessage.id}" type="hidden">
 				<input type="submit" value="更新">（140文字まで）
 			</form>
 		</div>
+		<a href="./">戻る</a>
+
+		<div class="copyright">Copyright(c)Kohei Nagano</div>
 
 	</div>
 

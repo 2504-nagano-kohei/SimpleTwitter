@@ -1,6 +1,8 @@
 package chapter6.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -8,6 +10,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
 
 import chapter6.beans.Message;
 import chapter6.logging.InitApplication;
@@ -56,13 +61,44 @@ public class EditMessageServlet extends HttpServlet {
 		log.info(new Object() {}.getClass().getEnclosingClass().getName() +
 		" : " + new Object() {}.getClass().getEnclosingMethod().getName());
 
-		int deleteMessageId = Integer.parseInt(request.getParameter("deleteMessageId"));
+		// 更新後のメッセージとメッセージIDを取得
+		int updatedMessageId = Integer.parseInt(request.getParameter("updatedMessageId"));
+		String updatedMessage = request.getParameter("updatedMessage");
 
-		Message message = new Message();
-		message.setId(deleteMessageId);
-		message.getId();
+		// 取得したものを引数にしてメッセージサービスに渡す
+		new MessageService().update(updatedMessageId, updatedMessage);
 
-		new MessageService().delete(deleteMessageId);
+		// バリデーションのため
+        HttpSession session = request.getSession();
+        List<String> errorMessages = new ArrayList<String>();
+
+        if (!isValid(updatedMessage, errorMessages)) {
+            session.setAttribute("errorMessages", errorMessages);
+            response.sendRedirect("./");
+            return;
+        }
+
 		response.sendRedirect("./");
 	}
+
+	// バリデーションも追加
+    private boolean isValid(String updatedMessage, List<String> errorMessages) {
+
+	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
+        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+
+        if (StringUtils.isBlank(updatedMessage)) {
+            errorMessages.add("メッセージを入力してください");
+        } else if (140 < updatedMessage.length()) {
+            errorMessages.add("140文字以下で入力してください");
+        } else if (updatedMessage == updatedMessage) {
+        	errorMessages.add("つぶやき内容を変更しない場合は「戻る」ボタンでお戻りください");
+        }
+
+        if (errorMessages.size() != 0) {
+            return false;
+        }
+        return true;
+    }
+
 }

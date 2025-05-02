@@ -63,12 +63,11 @@
 			<c:forEach items="${messages}" var="message">
 				<div class="message">
 					<div class="account-name">
-						<span class="account">
-							<a href="./?user_id=<c:out value="${message.userId}"/> ">
-								<c:out value="${message.account}" />
-							</a>
-						</span>
-						<span class="name"><c:out value="${message.name}" /></span>
+						<span class="account"> <a
+							href="./?user_id=<c:out value="${message.userId}"/> "> <c:out
+									value="${message.account}" />
+						</a>
+						</span> <span class="name"><c:out value="${message.name}" /></span>
 					</div>
 					<div class="text">
 						<c:out value="${message.text}" />
@@ -79,18 +78,20 @@
 					</div>
 					<%-- つぶやきの編集 --%>
 					<div>
-						<form action="edit">
-							<input name="editMessageId" value="${message.id}" type="hidden">
-							<input type="submit" value="編集">
-						</form>
-						<%-- つぶやきの削除 --%>
-						<form action="deleteMessage" method="post">
-							<input name="deleteMessageId" value="${message.id}" type="hidden">
-							<input type="submit" value="削除"><br />
-						</form>
+						<c:if test="${ not empty loginUser }">
+							<form action="edit">
+								<input name="editMessageId" value="${message.id}" type="hidden">
+								<input type="submit" value="編集">
+							</form>
+							<%-- つぶやきの削除 --%>
+							<form action="deleteMessage" method="post">
+								<input name="deleteMessageId" value="${message.id}" type="hidden">
+								<input type="submit" value="削除"><br />
+							</form>
+						</c:if>
 					</div>
-				</c:forEach>
-			</div>
+			</c:forEach>
+		</div>
 
 		<div class="copyright">Copyright(c)Kohei_Nagano</div>
 	</div>
