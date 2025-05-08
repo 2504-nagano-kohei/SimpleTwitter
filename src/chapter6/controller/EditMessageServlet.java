@@ -48,20 +48,25 @@ public class EditMessageServlet extends HttpServlet {
 
 		// requestから編集したいメッセージのIDを取得
 		String emId = request.getParameter("editMessageId");
-//
+
 		// 打鍵テスト1回目：MessageIdが数値かどうか（正規表現） 、　MessageIdが削除されているかどうか（isBlank）
-		if (!emId.matches("^[0-9]+$") || StringUtils.isBlank(emId)) {
+		if ((StringUtils.isBlank(emId)) || (!emId.matches("^[0-9]+$"))) {
 			errorMessages.add("不正なパラメーターが入力されました") ;
 			session.setAttribute("errorMessages", errorMessages);
             response.sendRedirect("./");
             return;
 		}
 
-		// MessageIdがDB上に存在しているか（int型に変換してからDB検索へ）
+		// MessageIdがDB上に存在しているか（編集画面を呼び出す処理に追加）
 		int editMessageId = Integer.parseInt(emId);
-		Message editMessage = new MessageService().searchId(editMessageId);
-
 		Message editMessage = new MessageService().displayEdit(editMessageId);
+
+		if (editMessage == null) {
+			errorMessages.add("不正なパラメーターが入力されました") ;
+			session.setAttribute("errorMessages", errorMessages);
+            response.sendRedirect("./");
+            return;
+		}
 
 		request.setAttribute("editMessage", editMessage);
 		request.getRequestDispatcher("edit.jsp").forward(request, response);
@@ -77,29 +82,32 @@ public class EditMessageServlet extends HttpServlet {
 		log.info(new Object() {}.getClass().getEnclosingClass().getName() +
 		" : " + new Object() {}.getClass().getEnclosingMethod().getName());
 
-		// 更新後のメッセージとメッセージID、更新前のメッセージを取得
+		// 更新後のメッセージとメッセージIDを取得
 		int updatedMessageId = Integer.parseInt(request.getParameter("updatedMessageId"));
 		String updatedMessage = request.getParameter("updatedMessage");
-		String beforUpdatedMessage = request.getParameter("beforUpdatedMessage");
 
-		// 取得したものを引数にしてメッセージサービスに渡す
-		new MessageService().update(updatedMessageId, updatedMessage);
+		Message editMessage = new Message();
+		editMessage.setText(updatedMessage);
+		editMessage.setId(updatedMessageId);
 
-		// バリデーションのため
-        HttpSession session = request.getSession();
+		// メッセージのバリデーションのため
         List<String> errorMessages = new ArrayList<String>();
 
-        if (!isValid(beforUpdatedMessage, updatedMessage, errorMessages)) {
-            session.setAttribute("errorMessages", errorMessages);
-            response.sendRedirect("./");
+        if (!isValid(updatedMessage, errorMessages)) {
+        	request.setAttribute("errorMessages", errorMessages);
+        	request.setAttribute("editMessage", editMessage);
+            request.getRequestDispatcher("edit.jsp").forward(request, response);
             return;
         }
+
+		// 取得したものを引数にしてMessageServiceに渡す
+		new MessageService().update(updatedMessageId, updatedMessage);
 
 		response.sendRedirect("./");
 	}
 
 	// バリデーションも追加
-    private boolean isValid(String beforUpdatedMessage, String updatedMessage, List<String> errorMessages) {
+    private boolean isValid(String updatedMessage, List<String> errorMessages) {
 
 	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
         " : " + new Object(){}.getClass().getEnclosingMethod().getName());

@@ -127,14 +127,16 @@ public class MessageDao {
                 ps.setInt(1, editMessageId);
                 ResultSet rs = ps.executeQuery();
 
-                Message editMessage = new Message();
-
-                while (rs.next()) {
+                if (rs.next()) {
+                	Message editMessage = new Message();
                 	editMessage.setId(rs.getInt("id"));
                 	editMessage.setText(rs.getString("text"));
+                	return editMessage;
+                } else {
+                	return null;
                 }
 
-                return editMessage;
+
             } catch (SQLException e) {
     		log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
                 throw new SQLRuntimeException(e);
@@ -171,31 +173,4 @@ public class MessageDao {
                 close(ps);
             }
     	}
-
-    	public Message searchId(Connection connection, int editMessageId) {
-
-      	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
-      	" : " + new Object(){}.getClass().getEnclosingMethod().getName());
-
-              PreparedStatement ps = null;
-              try {
-                  StringBuilder sql = new StringBuilder();
-                  sql.append("SELECT id FROM messages WHERE id = ?");
-
-                  ps = connection.prepareStatement(sql.toString());
-                  ps.setInt(1, editMessageId);
-                  ResultSet rs = ps.executeQuery();
-
-                  Message editMessage = new Message();
-                  editMessage.setId(rs.getInt("id"));
-
-                  return editMessage;
-              } catch (SQLException e) {
-      		log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
-                  throw new SQLRuntimeException(e);
-              } finally {
-                  close(ps);
-              }
-
-          }
 }

@@ -164,32 +164,6 @@ public class MessageService {
 		}
 	}
 
-	// 編集画面URLのMessageIdが変更された際にDB上を確認するコード
-	public Message searchId(int editMessageId) {
-
-		log.info(new Object() {}.getClass().getEnclosingClass().getName()
-		+ " : " + new Object() {}.getClass().getEnclosingMethod().getName());
-
-			Connection connection = null;
-			try {
-				connection = getConnection();
-				new MessageDao().searchId(connection, editMessageId);
-				commit(connection);
-			} catch (RuntimeException e) {
-				rollback(connection);
-				log.log(Level.SEVERE, new Object() {
-				}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
-				throw e;
-			} catch (Error e) {
-				rollback(connection);
-				log.log(Level.SEVERE, new Object() {
-				}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
-				throw e;
-			} finally {
-				close(connection);
-			}
-	}
-
 	// メッセージ一覧を取得するコード
 	public List<UserMessage> select(String userId) {
 
