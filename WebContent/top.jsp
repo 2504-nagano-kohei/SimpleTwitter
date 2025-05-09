@@ -84,7 +84,7 @@
 								<input type="submit" value="編集">
 							</form>
 							<%-- つぶやきの削除 --%>
-							<form action="deleteMessage" method="post" style= "display:inline;">
+							<form action="deleteMessage" method="post">
 								<input name="deleteMessageId" value="${message.id}" type="hidden">
 								<input type="submit" value="削除"><br />
 							</form>

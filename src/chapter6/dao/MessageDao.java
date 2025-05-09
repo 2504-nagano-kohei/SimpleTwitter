@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,6 +31,7 @@ public class MessageDao {
         application.init();
     }
 
+    // つぶやく
     public void insert(Connection connection, Message message) {
 
 	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
@@ -63,6 +66,8 @@ public class MessageDao {
         }
     }
 
+
+    // つぶやきの削除
     public void delete(Connection connection, int deleteMessageId ) {
 
   	log.info(new Object(){}.getClass().getEnclosingClass().getName() +
@@ -85,35 +90,9 @@ public class MessageDao {
           }
       }
 
-    public void edit(Connection connection, Message message) {
 
-  	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
-          " : " + new Object(){}.getClass().getEnclosingMethod().getName());
-
-          PreparedStatement ps = null;
-          try {
-              StringBuilder sql = new StringBuilder();
-              sql.append("UPDATE messages SET");
-              sql.append("    text, ");
-              sql.append("WHERE");
-              sql.append("    id = ?");  // user_id
-
-              ps = connection.prepareStatement(sql.toString());
-
-              ps.setInt(1, message.getUserId());
-              ps.setString(2, message.getText());
-
-              ps.executeUpdate();
-          } catch (SQLException e) {
-  		log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
-              throw new SQLRuntimeException(e);
-          } finally {
-              close(ps);
-          }
-      }
-
-    // 編集対象のつぶやき内容を取得する(つぶやきの編集画面を表示)
-    public Message displayEdit(Connection connection, int editMessageId) {
+    // つぶやきの編集（編集画面の呼び出し）
+    public Message select(Connection connection, int editMessageId) {
 
     	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
             " : " + new Object(){}.getClass().getEnclosingMethod().getName());
@@ -121,34 +100,26 @@ public class MessageDao {
             PreparedStatement ps = null;
             try {
                 StringBuilder sql = new StringBuilder();
-                sql.append("SELECT id, text FROM messages WHERE id = ?");
+                sql.append("SELECT * FROM messages WHERE id = ?"); // message_id
 
                 ps = connection.prepareStatement(sql.toString());
                 ps.setInt(1, editMessageId);
                 ResultSet rs = ps.executeQuery();
 
-                if (rs.next()) {
-                	Message editMessage = new Message();
-                	editMessage.setId(rs.getInt("id"));
-                	editMessage.setText(rs.getString("text"));
-                	return editMessage;
-                } else {
-                	return null;
-                }
+                List<Message> messages = toMessages(rs);
 
-
+                	return messages.get(0);
             } catch (SQLException e) {
     		log.log(Level.SEVERE, new Object(){}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
                 throw new SQLRuntimeException(e);
             } finally {
                 close(ps);
             }
-
         }
 
 
-
-    	public void update(Connection connection, int updatedMessageId, String updatedMessage) {
+    // つぶやきの編集（更新）
+    	public void update(Connection connection, Message editMessage) {
 
     		log.info(new Object(){}.getClass().getEnclosingClass().getName() +
     		" : " + new Object(){}.getClass().getEnclosingMethod().getName());
@@ -157,13 +128,14 @@ public class MessageDao {
     		try {
                 StringBuilder sql = new StringBuilder();
                 sql.append("UPDATE messages SET");
-                sql.append("    text = ?");
+                sql.append("    text = ?,"); // message
+                sql.append("    updated_date = CURRENT_TIMESTAMP "); // 1回目コードレビュー時に追加
                 sql.append("WHERE");
-                sql.append("    id = ?");
+                sql.append("    id = ?"); // id
 
                 ps = connection.prepareStatement(sql.toString());
-                ps.setString(1, updatedMessage);
-                ps.setInt(2, updatedMessageId);
+                ps.setString(1, editMessage.getText());
+                ps.setInt(2, editMessage.getId());
                 ps.executeUpdate();
 
             } catch (SQLException e) {
@@ -172,5 +144,27 @@ public class MessageDao {
             } finally {
                 close(ps);
             }
+    	}
+
+
+    	private List<Message> toMessages(ResultSet rs) throws SQLException {
+
+    		log.info(new Object() {}.getClass().getEnclosingClass().getName() +
+    		" : " + new Object() {}.getClass().getEnclosingMethod().getName());
+
+    		List<Message> messages = new ArrayList<Message>();
+
+    		try {
+    			while(rs.next()) {
+    				Message message = new Message();
+    				message.setText(rs.getString("text"));
+    				message.setId(rs.getInt("id"));
+
+    				messages.add(message);
+    			}
+    			return messages;
+    		} finally {
+    			close(rs);
+    		}
     	}
 }

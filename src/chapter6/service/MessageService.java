@@ -30,9 +30,9 @@ public class MessageService {
 	public MessageService() {
 		InitApplication application = InitApplication.getInstance();
 		application.init();
-
 	}
 
+	// つぶやく
 	public void insert(Message message) {
 
 		log.info(new Object() {}.getClass().getEnclosingClass().getName()
@@ -58,6 +58,7 @@ public class MessageService {
 		}
 	}
 
+	// つぶやきの削除
 	public void delete(int deleteMessageId) {
 
 		log.info(new Object() {}.getClass().getEnclosingClass().getName()
@@ -84,33 +85,8 @@ public class MessageService {
 		}
 	}
 
-	public void delete(Message message) {
-
-		log.info(new Object() {}.getClass().getEnclosingClass().getName()
-		+ " : " + new Object() {}.getClass().getEnclosingMethod().getName());
-
-		Connection connection = null;
-		try {
-			connection = getConnection();
-			new MessageDao().insert(connection, message);
-			commit(connection);
-		} catch (RuntimeException e) {
-			rollback(connection);
-			log.log(Level.SEVERE, new Object() {
-			}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
-			throw e;
-		} catch (Error e) {
-			rollback(connection);
-			log.log(Level.SEVERE, new Object() {
-			}.getClass().getEnclosingClass().getName() + " : " + e.toString(), e);
-			throw e;
-		} finally {
-			close(connection);
-		}
-	}
-
 	// つぶやきの編集画面を呼び出す
-	public Message displayEdit(int editMessageId) {
+	public Message select(int editMessageId) {
 
 		log.info(new Object() {}.getClass().getEnclosingClass().getName()
 		+ " : " + new Object() {}.getClass().getEnclosingMethod().getName());
@@ -118,7 +94,7 @@ public class MessageService {
 		Connection connection = null;
 		try {
 			connection = getConnection();
-			Message editMessage = new MessageDao().displayEdit(connection, editMessageId);
+			Message editMessage = new MessageDao().select(connection, editMessageId);
 			commit(connection);
 
 			return editMessage;
@@ -138,7 +114,7 @@ public class MessageService {
 	}
 
 	// つぶやきを編集（更新）
-	public void update(int updatedMessageId, String updatedMessage) {
+	public void update(Message editMessage) {
 
 		log.info(new Object() {}.getClass().getEnclosingClass().getName()
 		+ " : " + new Object() {}.getClass().getEnclosingMethod().getName());
@@ -147,7 +123,7 @@ public class MessageService {
 		try {
 			connection = getConnection();
 			// さらにconnectionを一緒に引数として渡す
-			new MessageDao().update(connection, updatedMessageId, updatedMessage);
+			new MessageDao().update(connection, editMessage);
 			commit(connection);
 		} catch (RuntimeException e) {
 			rollback(connection);

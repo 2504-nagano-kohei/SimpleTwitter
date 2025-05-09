@@ -19,7 +19,7 @@ import chapter6.logging.InitApplication;
 import chapter6.service.MessageService;
 
 @WebServlet(urlPatterns = { "/edit" })
-public class EditMessageServlet extends HttpServlet {
+public class EditServlet extends HttpServlet {
 
 	/**
 	* ロガーインスタンスの生成
@@ -30,7 +30,7 @@ public class EditMessageServlet extends HttpServlet {
 	* デフォルトコンストラクタ
 	* アプリケーションの初期化を実施する。
 	*/
-	public EditMessageServlet() {
+	public EditServlet() {
 		InitApplication application = InitApplication.getInstance();
 		application.init();
 	}
@@ -49,30 +49,28 @@ public class EditMessageServlet extends HttpServlet {
 		// requestから編集したいメッセージのIDを取得
 		String emId = request.getParameter("editMessageId");
 
-		// 打鍵テスト1回目：MessageIdが数値かどうか（正規表現） 、　MessageIdが削除されているかどうか（isBlank）
+		// URLを手動で入力した場合、MessageIdが数値かどうか（正規表現）、MessageIdが削除されていないかどうか（isBlank）
 		if ((StringUtils.isBlank(emId)) || (!emId.matches("^[0-9]+$"))) {
-			errorMessages.add("不正なパラメーターが入力されました") ;
+			errorMessages.add("不正なパラメーターが入力されました");
 			session.setAttribute("errorMessages", errorMessages);
-            response.sendRedirect("./");
-            return;
+			response.sendRedirect("./");
+			return;
 		}
 
 		// MessageIdがDB上に存在しているか（編集画面を呼び出す処理に追加）
 		int editMessageId = Integer.parseInt(emId);
-		Message editMessage = new MessageService().displayEdit(editMessageId);
+		Message editMessage = new MessageService().select(editMessageId);
 
 		if (editMessage == null) {
-			errorMessages.add("不正なパラメーターが入力されました") ;
+			errorMessages.add("不正なパラメーターが入力されました");
 			session.setAttribute("errorMessages", errorMessages);
-            response.sendRedirect("./");
-            return;
+			response.sendRedirect("./");
+			return;
 		}
 
 		request.setAttribute("editMessage", editMessage);
 		request.getRequestDispatcher("edit.jsp").forward(request, response);
 	}
-
-
 
 	// つぶやきを編集し、更新ボタンが押されるとDB上のtextを上書き（更新）し、top.jspで表示させたい
 	@Override
@@ -91,37 +89,37 @@ public class EditMessageServlet extends HttpServlet {
 		editMessage.setId(updatedMessageId);
 
 		// メッセージのバリデーションのため
-        List<String> errorMessages = new ArrayList<String>();
+		List<String> errorMessages = new ArrayList<String>();
 
-        if (!isValid(updatedMessage, errorMessages)) {
-        	request.setAttribute("errorMessages", errorMessages);
-        	request.setAttribute("editMessage", editMessage);
-            request.getRequestDispatcher("edit.jsp").forward(request, response);
-            return;
-        }
+		if (!isValid(updatedMessage, errorMessages)) {
+			request.setAttribute("errorMessages", errorMessages);
+			request.setAttribute("editMessage", editMessage);
+			request.getRequestDispatcher("edit.jsp").forward(request, response);
+			return;
+		}
 
 		// 取得したものを引数にしてMessageServiceに渡す
-		new MessageService().update(updatedMessageId, updatedMessage);
+		new MessageService().update(editMessage);
 
 		response.sendRedirect("./");
 	}
 
 	// バリデーションも追加
-    private boolean isValid(String updatedMessage, List<String> errorMessages) {
+	private boolean isValid(String updatedMessage, List<String> errorMessages) {
 
-	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
-        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
+		log.info(new Object() {}.getClass().getEnclosingClass().getName() +
+		" : " + new Object() {}.getClass().getEnclosingMethod().getName());
 
-        if (StringUtils.isBlank(updatedMessage)) {
-            errorMessages.add("メッセージを入力してください");
-        } else if (updatedMessage.length() > 140) {
-            errorMessages.add("140文字以下で入力してください");
-        }
+		if (StringUtils.isBlank(updatedMessage)) {
+			errorMessages.add("メッセージを入力してください");
+		} else if (updatedMessage.length() > 140) {
+			errorMessages.add("140文字以下で入力してください");
+		}
 
-        if (errorMessages.size() != 0) {
-            return false;
-        }
-        return true;
-    }
+		if (errorMessages.size() != 0) {
+			return false;
+		}
+		return true;
+	}
 
 }
