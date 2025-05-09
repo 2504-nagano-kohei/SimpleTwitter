@@ -15,32 +15,31 @@ import chapter6.service.MessageService;
 @WebServlet(urlPatterns = { "/deleteMessage" })
 public class DeleteMessageServlet extends HttpServlet {
 
+	/**
+	* ロガーインスタンスの生成
+	*/
+	Logger log = Logger.getLogger("twitter");
 
-    /**
-    * ロガーインスタンスの生成
-    */
-    Logger log = Logger.getLogger("twitter");
+	/**
+	* デフォルトコンストラクタ
+	* アプリケーションの初期化を実施する。
+	*/
+	public DeleteMessageServlet() {
+		InitApplication application = InitApplication.getInstance();
+		application.init();
+	}
 
-    /**
-    * デフォルトコンストラクタ
-    * アプリケーションの初期化を実施する。
-    */
-    public DeleteMessageServlet() {
-        InitApplication application = InitApplication.getInstance();
-        application.init();
-    }
+	// 削除ボタンが押されたつぶやきのIDを取得してDBから削除したい
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 
+		log.info(new Object() {}.getClass().getEnclosingClass().getName() +
+		" : " + new Object() {}.getClass().getEnclosingMethod().getName());
 
-    // 削除ボタンが押されたつぶやきのIDを取得してDBから削除したい
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		int deleteMessageId = Integer.parseInt(request.getParameter("deleteMessageId"));
 
-	  log.info(new Object(){}.getClass().getEnclosingClass().getName() +
-        " : " + new Object(){}.getClass().getEnclosingMethod().getName());
-
-        int deleteMessageId = Integer.parseInt(request.getParameter("deleteMessageId"));
-
-        new MessageService().delete(deleteMessageId);
-        response.sendRedirect("./");
-    }
+		new MessageService().delete(deleteMessageId);
+		response.sendRedirect("./");
+	}
 }

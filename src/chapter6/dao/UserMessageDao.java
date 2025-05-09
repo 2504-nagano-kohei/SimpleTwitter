@@ -68,8 +68,9 @@ public class UserMessageDao {
 			List<UserMessage> messages = toUserMessages(rs);
 			return messages;
 		} catch (SQLException e) {
-			log.log(Level.SEVERE, new Object() {}.getClass().getEnclosingClass().getName() +
-			" : " + e.toString(), e);
+			log.log(Level.SEVERE, new Object() {
+			}.getClass().getEnclosingClass().getName() +
+					" : " + e.toString(), e);
 			throw new SQLRuntimeException(e);
 		} finally {
 			close(ps);

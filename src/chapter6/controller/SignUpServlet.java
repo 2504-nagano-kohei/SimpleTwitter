@@ -32,9 +32,7 @@ public class SignUpServlet extends HttpServlet {
 	public SignUpServlet() {
 		InitApplication application = InitApplication.getInstance();
 		application.init();
-
 	}
-
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -44,8 +42,7 @@ public class SignUpServlet extends HttpServlet {
 		" : " + new Object() {}.getClass().getEnclosingMethod().getName());
 
 		request.getRequestDispatcher("signup.jsp").forward(request, response);
-		}
-
+	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -66,7 +63,6 @@ public class SignUpServlet extends HttpServlet {
 		response.sendRedirect("./");
 	}
 
-
 	private User getUser(HttpServletRequest request) throws IOException, ServletException {
 
 		log.info(new Object() {}.getClass().getEnclosingClass().getName() +
@@ -80,7 +76,6 @@ public class SignUpServlet extends HttpServlet {
 		user.setDescription(request.getParameter("description"));
 		return user;
 	}
-
 
 	private boolean isValid(User user, List<String> errorMessages) {
 

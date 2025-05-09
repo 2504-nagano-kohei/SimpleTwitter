@@ -31,7 +31,6 @@ public class LoginServlet extends HttpServlet {
 	public LoginServlet() {
 		InitApplication application = InitApplication.getInstance();
 		application.init();
-
 	}
 
 	@Override
@@ -44,7 +43,7 @@ public class LoginServlet extends HttpServlet {
 		request.getRequestDispatcher("login.jsp").forward(request, response);
 	}
 
-	
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
