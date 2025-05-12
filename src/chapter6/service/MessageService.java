@@ -85,8 +85,8 @@ public class MessageService {
 		}
 	}
 
-	// つぶやきの編集画面を呼び出す
-	public Message select(int editMessageId) {
+	// つぶやきの編集画面を呼び出す(ログイン中のユーザーのつぶやきのみ)
+	public Message select(int editMessageId, int userId) {
 
 		log.info(new Object() {}.getClass().getEnclosingClass().getName()
 		+ " : " + new Object() {}.getClass().getEnclosingMethod().getName());
@@ -94,7 +94,7 @@ public class MessageService {
 		Connection connection = null;
 		try {
 			connection = getConnection();
-			Message editMessage = new MessageDao().select(connection, editMessageId);
+			Message editMessage = new MessageDao().select(connection, editMessageId, userId);
 			commit(connection);
 
 			return editMessage;

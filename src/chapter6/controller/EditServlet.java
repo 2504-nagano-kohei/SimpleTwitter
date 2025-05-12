@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 
 import chapter6.beans.Message;
+import chapter6.beans.User;
 import chapter6.logging.InitApplication;
 import chapter6.service.MessageService;
 
@@ -47,19 +48,22 @@ public class EditServlet extends HttpServlet {
 		List<String> errorMessages = new ArrayList<String>();
 
 		// requestから編集したいメッセージのIDを取得
-		String emId = request.getParameter("editMessageId");
+		String MessageId = request.getParameter("editMessageId");
 
-		// URLを手動で入力した場合、MessageIdが数値かどうか（正規表現）、MessageIdが削除されていないかどうか（isBlank）
-		if ((StringUtils.isBlank(emId)) || (!emId.matches("^[0-9]+$"))) {
+		// URLを手動で入力した場合、MessageIdが数値かどうか（正規表現）＆ MessageIdが削除されていないかどうか（isBlank）確認
+		if (StringUtils.isBlank(MessageId) || !MessageId.matches("^[0-9]+$")) {
 			errorMessages.add("不正なパラメーターが入力されました");
 			session.setAttribute("errorMessages", errorMessages);
 			response.sendRedirect("./");
 			return;
 		}
 
-		// MessageIdがDB上に存在しているか（編集画面を呼び出す処理に追加）
-		int editMessageId = Integer.parseInt(emId);
-		Message editMessage = new MessageService().select(editMessageId);
+		// MessageIdがDB上に存在しているか（編集画面を呼び出す処理に追加）確認
+		// ログイン中のユーザーIDのつぶやきかどうかも確認
+		int editMessageId = Integer.parseInt(MessageId);
+		User user = (User) request.getSession().getAttribute("loginUser");
+		int userId = user.getId();
+		Message editMessage = new MessageService().select(editMessageId, userId);
 
 		if (editMessage == null) {
 			errorMessages.add("不正なパラメーターが入力されました");

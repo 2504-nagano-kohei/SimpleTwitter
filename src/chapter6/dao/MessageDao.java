@@ -76,7 +76,7 @@ public class MessageDao {
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
-			sql.append(" DELETE FROM messages WHERE id = ?;"); // message_id
+			sql.append(" DELETE FROM messages WHERE id = ?"); // message_id
 
 			ps = connection.prepareStatement(sql.toString());
 			ps.setInt(1, deleteMessageId);
@@ -92,7 +92,7 @@ public class MessageDao {
 	}
 
 	// つぶやきの編集（編集画面の呼び出し）
-	public Message select(Connection connection, int editMessageId) {
+	public Message select(Connection connection, int editMessageId, int userId) {
 
 		log.info(new Object() {}.getClass().getEnclosingClass().getName() +
 		" : " + new Object() {}.getClass().getEnclosingMethod().getName());
@@ -100,10 +100,11 @@ public class MessageDao {
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT * FROM messages WHERE id = ?"); // message_id
+			sql.append("SELECT * FROM messages WHERE id = ? AND user_id = ?"); // message_id
 
 			ps = connection.prepareStatement(sql.toString());
 			ps.setInt(1, editMessageId);
+			ps.setInt(2, userId);
 			ResultSet rs = ps.executeQuery();
 
 			List<Message> messages = toMessages(rs);
