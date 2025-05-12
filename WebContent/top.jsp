@@ -77,19 +77,34 @@
 					<%-- つぶやきの編集 --%>
 					<div>
 						<c:if test="${loginUser.id == message.userId}">
-							<form action="edit">
+							<form action="edit" method="get">
 								<input name="editMessageId" value="${message.id}" type="hidden">
 								<input type="submit" value="編集">
 							</form>
 							<%-- つぶやきの削除 --%>
 							<form action="deleteMessage" method="post">
-								<input name="deleteMessageId" value="${message.id}"
-									type="hidden"> <input type="submit" value="削除"><br />
+								<input name="deleteMessageId" value="${message.id}" type="hidden">
+									<input type="submit" value="削除"><br />
 							</form>
 						</c:if>
 					</div>
+
+					<%-- つぶやきの返信 --%>
+					<div class="form-area">
+						<c:if test="${ not empty loginUser }">
+							<form action="comment" method="post">
+								返信<br />
+								<textarea name="comment" cols="100" rows="5" class="tweet-box"></textarea>
+								<input name="messageId" value="${message.id}" type="hidden">
+								<br /> <input type="submit" value="返信">
+							</form>
+						</c:if>
+					</div>
+
+					<%-- 返信した文面を表示させるエリア --%>
+
+				</div>
 			</c:forEach>
-		</div>
 
 		<div class="copyright">Copyright(c)Kohei_Nagano</div>
 	</div>

@@ -3,7 +3,7 @@ package chapter6.beans;
 import java.io.Serializable;
 import java.util.Date;
 
-public class UserMessage implements Serializable {
+public class UserComment implements Serializable {
 
 	private int id;
 	private String account;
@@ -12,7 +12,6 @@ public class UserMessage implements Serializable {
 	private String text;
 	private Date createdDate;
 
-	// getter/setterは省略されているので、自分で記述しましょう。
 	// id
 	public int getId() {
 		return id;

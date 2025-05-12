@@ -152,7 +152,7 @@ public class MessageService {
 		try {
 			connection = getConnection();
 
-			// 実践課題②　78行目まで
+			// 実践課題②
 			Integer id = null;
 			if (!StringUtils.isEmpty(userId)) {
 				id = Integer.parseInt(userId);
