@@ -59,6 +59,7 @@
 			</c:if>
 		</div>
 
+		<%-- つぶやきの一覧 --%>
 		<div class="messages">
 			<c:forEach items="${messages}" var="message">
 				<div class="message">
@@ -88,23 +89,46 @@
 							</form>
 						</c:if>
 					</div>
-
-					<%-- つぶやきの返信 --%>
-					<div class="form-area">
-						<c:if test="${ not empty loginUser }">
-							<form action="comment" method="post">
-								返信<br />
-								<textarea name="comment" cols="100" rows="5" class="tweet-box"></textarea>
-								<input name="messageId" value="${message.id}" type="hidden">
-								<br /> <input type="submit" value="返信">
-							</form>
-						</c:if>
-					</div>
-
-					<%-- 返信した文面を表示させるエリア --%>
-
 				</div>
+
+				<%-- つぶやきの返信 --%>
+				<div class="form-area">
+					<c:if test="${ not empty loginUser }">
+						<form action="comment" method="post">
+							<textarea name="comment" cols="100" rows="5" class="tweet-box"></textarea>
+							<input name="messageId" value="${message.id}" type="hidden">
+							<br /> <input type="submit" value="返信">（140文字まで）
+						</form>
+					</c:if>
+				</div>
+
+				<%-- 返信の一覧 --%>
+				<div class="comments">
+					<c:forEach items="${comments}" var="comment">
+						<c:if test="${ comment.messageId == message.id}">
+							<div class="comment">
+								<div class="account-name">
+									<span class="account">
+										<c:out	value="${comment.account}" />
+									</span>
+									<span class="name">
+										<c:out value="${comment.name}" />
+									</span>
+								</div>
+								<div class="text">
+									<pre><c:out value="${comment.text}" /></pre>
+								</div>
+								<div class="date">
+									<fmt:formatDate value="${comment.createdDate}" pattern="yyyy/MM/dd HH:mm:ss" />
+								</div>
+							</div>
+						</c:if>
+					</c:forEach>
+				</div>
+
 			</c:forEach>
+		</div>
+	</div>
 
 		<div class="copyright">Copyright(c)Kohei_Nagano</div>
 	</div>

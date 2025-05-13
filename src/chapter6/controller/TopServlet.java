@@ -61,6 +61,7 @@ public class TopServlet extends HttpServlet {
 		List<UserComment> comments = new CommentService().select();
 
 		request.setAttribute("messages", messages);
+		request.setAttribute("comments", comments);
 		request.setAttribute("isShowMessageForm", isShowMessageForm);
 		request.getRequestDispatcher("/top.jsp").forward(request, response);
 	}
