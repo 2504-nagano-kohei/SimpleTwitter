@@ -4,6 +4,8 @@ import static chapter6.utils.CloseableUtil.*;
 import static chapter6.utils.DBUtil.*;
 
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -141,7 +143,7 @@ public class MessageService {
 	}
 
 	// メッセージ一覧を取得するコード
-	public List<UserMessage> select(String userId) {
+	public List<UserMessage> select(String userId, String startDate, String endDate) {
 
 		log.info(new Object() {}.getClass().getEnclosingClass().getName() +
 		" : " + new Object() {}.getClass().getEnclosingMethod().getName());
@@ -157,7 +159,26 @@ public class MessageService {
 			if (!StringUtils.isEmpty(userId)) {
 				id = Integer.parseInt(userId);
 			}
-			List<UserMessage> messages = new UserMessageDao().select(connection, id, LIMIT_NUM);
+
+			// 現在日時を取得&表示形式を指定
+			Date nowDate = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+			String dafaultStartDate = "2020-01-01 00:00:00";
+			String dafaultEndDate = sdf.format(nowDate);
+
+//			※入力の有無を判定し、開始と終了の日時を引数に設定
+			if (!StringUtils.isBlank(startDate)) {
+				startDate += " 00:00:00";
+			} else {
+				startDate = dafaultStartDate;
+			}
+			if (!StringUtils.isBlank(endDate)) {
+				endDate += " 23:59:59";
+			} else {
+				endDate = dafaultEndDate;
+			}
+			List<UserMessage> messages = new UserMessageDao().select(connection, id, LIMIT_NUM, startDate, endDate);
 			commit(connection);
 			return messages;
 		} catch (RuntimeException e) {

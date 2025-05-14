@@ -56,13 +56,19 @@ public class TopServlet extends HttpServlet {
 		 * MessageServiceのselectに引数としてString型のuser_idを追加
 		 */
 		String userId = request.getParameter("user_id");
-		List<UserMessage> messages = new MessageService().select(userId);
+		String startDate = request.getParameter("startDate");
+		String endDate = request.getParameter("endDate");
 
+		// つぶやきの一覧取得
+		List<UserMessage> messages = new MessageService().select(userId, startDate, endDate);
+		// 返信の一覧取得
 		List<UserComment> comments = new CommentService().select();
 
 		request.setAttribute("messages", messages);
 		request.setAttribute("comments", comments);
 		request.setAttribute("isShowMessageForm", isShowMessageForm);
+		request.setAttribute("startDate", startDate);
+		request.setAttribute("endDate", endDate);
 		request.getRequestDispatcher("/top.jsp").forward(request, response);
 	}
 }

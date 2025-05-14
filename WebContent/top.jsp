@@ -23,6 +23,18 @@
 				<a href="logout">ログアウト</a>
 			</c:if>
 		</div>
+
+		<%-- 絞り込みボタン --%>
+		<div>
+			<form action="./" method="get">
+				日付
+				<input type="date" name="startDate" value="${startDate}">
+				～
+				<input type="date" name="endDate" value="${endDate}">
+				<input type="submit" value="絞り込み">
+			</form>
+		</div>
+
 		<c:if test="${ not empty loginUser }">
 			<div class="profile">
 				<div class="name">
@@ -65,12 +77,16 @@
 				<div class="message">
 					<div class="account-name">
 						<span class="account">
-						<a href="./?user_id=<c:out value="${message.userId}"/> ">
-						<c:out	value="${message.account}" />
-						</a>
-						</span> <span class="name"><c:out value="${message.name}" /></span>
+							<a href="./?user_id=<c:out value="${message.userId}"/> ">
+								<c:out	value="${message.account}" />
+							</a>
+						</span>
+						<span class="name">
+							<c:out value="${message.name}" />
+						</span>
 					</div>
-					<div class="text"><pre><c:out value="${message.text}" /></pre>
+					<div class="text">
+						<pre><c:out value="${message.text}" /></pre>
 					</div>
 					<div class="date">
 						<fmt:formatDate value="${message.createdDate}" pattern="yyyy/MM/dd HH:mm:ss" />
@@ -85,7 +101,7 @@
 							<%-- つぶやきの削除 --%>
 							<form action="deleteMessage" method="post">
 								<input name="deleteMessageId" value="${message.id}" type="hidden">
-									<input type="submit" value="削除"><br />
+								<input type="submit" value="削除"><br />
 							</form>
 						</c:if>
 					</div>
