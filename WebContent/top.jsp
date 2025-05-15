@@ -12,6 +12,7 @@
 </head>
 <body>
 	<div class="main-contents">
+		<%-- ヘッダー --%>
 		<div class="header">
 			<c:if test="${ empty loginUser }">
 				<a href="login">ログイン</a>
@@ -35,6 +36,7 @@
 			</form>
 		</div>
 
+	<%-- プロフィール --%>
 		<c:if test="${ not empty loginUser }">
 			<div class="profile">
 				<div class="name">
@@ -50,6 +52,7 @@
 				</div>
 			</div>
 		</c:if>
+		<%-- エラーメッセージエリア --%>
 		<c:if test="${ not empty errorMessages }">
 			<div class="errorMessages">
 				<ul>
@@ -61,6 +64,7 @@
 			<c:remove var="errorMessages" scope="session" />
 		</c:if>
 
+		<%-- つぶやきフォーム --%>
 		<div class="form-area">
 			<c:if test="${ isShowMessageForm }">
 				<form action="message" method="post">
@@ -146,7 +150,8 @@
 		</div>
 	</div>
 
-		<div class="copyright">Copyright(c)Kohei_Nagano</div>
+	<div class="copyright">
+		Copyright(c)Kohei_Nagano
 	</div>
 </body>
 </html>
