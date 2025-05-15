@@ -167,7 +167,7 @@ public class MessageService {
 			String dafaultStartDate = "2020-01-01 00:00:00";
 			String dafaultEndDate = sdf.format(nowDate);
 
-//			※入力の有無を判定し、開始と終了の日時を引数に設定
+			// ※入力の有無を判定し、開始と終了の日時を引数に設定
 			if (!StringUtils.isBlank(startDate)) {
 				startDate += " 00:00:00";
 			} else {

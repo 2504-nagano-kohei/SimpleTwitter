@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(urlPatterns={"/setting","/edit"})
+@WebFilter(urlPatterns={"/setting", "/edit"})
 public class LoginFilter implements Filter {
 
 	@Override
@@ -41,7 +41,6 @@ public class LoginFilter implements Filter {
 		}
 	}
 
-
 	@Override
 	public void init(FilterConfig config) {
 	}
@@ -49,6 +48,4 @@ public class LoginFilter implements Filter {
 	@Override
 	public void destroy() {
 	}
-
-
 }

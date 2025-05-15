@@ -47,7 +47,7 @@ public class CommentServlet extends HttpServlet {
 		List<String> errorMessages = new ArrayList<String>();
 
 		// コメントを取得し、バリデーションを挟む
-		String text	= request.getParameter("comment");
+		String text = request.getParameter("comment");
 		if (!isValid(text, errorMessages)) {
 			session.setAttribute("errorMessages", errorMessages);
 			response.sendRedirect("./");
