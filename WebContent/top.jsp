@@ -8,7 +8,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="./css/style.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="./js/jQuery.min.js"></script>
+<script type="text/javascript" src="./js/delete.js"></script>
 <title>簡易Twitter</title>
 </head>
 <body>
@@ -106,7 +106,7 @@
 							<%-- つぶやきの削除 --%>
 							<form action="deleteMessage" method="post">
 								<input name="deleteMessageId" value="${message.id}" type="hidden">
-								<input type="submit" value="削除"><br />
+								<input type="submit" value="削除" onClick='return jumpConfirm(this);'><br />
 							</form>
 						</c:if>
 					</div>
